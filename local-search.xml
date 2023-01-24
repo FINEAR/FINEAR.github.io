@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>test</title>
+    <link href="/2023/01/24/test/"/>
+    <url>/2023/01/24/test/</url>
+    
+    <content type="html"><![CDATA[<p><span class="math inline">\(\lim\limits_{ x \to \infty }\sqrt{x^2+ax+b}+cx+d=0\)</span> <span class="math inline">\(\Rightarrow\frac{a}{2}=-d,c=-1\)</span></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>math</category>
+      
+    </categories>
+    
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>养生论</title>
     <link href="/2023/01/24/%E5%85%BB%E7%94%9F%E8%AE%BA/"/>
     <url>/2023/01/24/%E5%85%BB%E7%94%9F%E8%AE%BA/</url>
