@@ -8,7 +8,7 @@
     <link href="/2023/01/24/test/"/>
     <url>/2023/01/24/test/</url>
     
-    <content type="html"><![CDATA[<p><span class="math inline">\(\lim\limits_{ x \to \infty }\sqrt{x^2+ax+b}+cx+d=0\)</span> <span class="math inline">\(\Rightarrow\frac{a}{2}=-d,c=-1\)</span></p>]]></content>
+    <content type="html"><![CDATA[<p><span class="math inline">\(\lim\limits_{ x \to \infty }\sqrt{x^2+ax+b}+cx+d=0\)</span></p><p><span class="math inline">\(\Rightarrow\frac{a}{2}=-d,c=-1\)</span></p>]]></content>
     
     
     <categories>
@@ -36,6 +36,31 @@
       
     </categories>
     
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>妮看看</title>
+    <link href="/2023/01/24/%E5%A6%AE%E7%9C%8B%E7%9C%8B/"/>
+    <url>/2023/01/24/%E5%A6%AE%E7%9C%8B%E7%9C%8B/</url>
+    
+    <content type="html"><![CDATA[<p>博客新成，以飨妮妮</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>Love</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>妮子</tag>
+      
+    </tags>
     
   </entry>
   
