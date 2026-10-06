@@ -3,6 +3,46 @@
 > 本文件由 DSH 于 2026-10-04 体检后生成。记录博客现状、日常更新流程和已知问题。
 > 2026-10-04 更新：已修复 `url` 为 https、为文章补上固定日期、GitHub SSH 密钥、Vercel 构建失败（Node 18→24）、公式与表格滚动条、MathJax 加载 CDN；评论从 Valine 切到 Giscus；关闭已失效的访客统计；发布技术笔记三篇（DMFT 入门、洪特耦合与洪特金属、三轨道原子极限与两面神效应）。
 > 2026-10-06 更新：给《三轨道原子极限与洪特金属的两面神效应》补了一节附录——从 Kanamori 五项完整推导 N、S、L 形式的原子极限哈密顿量（含系数对照表、线性项为何可以丢掉、Slater/Racah 关系的来源，以及 Dworin–Narath 形式的对照）。该文参考文献也补到 10 条。
+> 2026-10-06 更新（二）：**源码已纳入 git 并推送到 GitHub**（`FINEAR/FINEAR.github.io` 仓库的 `source` 分支）——换电脑再也不用拷硬盘。新增两个双击脚本：`blog-demo\publish.cmd`（一键发布）与 `blog-demo\preview.cmd`（本地预览）。本说明书新增第零节（最快路径）、第八节（换电脑）与第九节（报错急救表）。
+
+---
+
+## 零、最快路径（只想发一篇文章时看这里）
+
+**1)** 按 `Win` 键，输入 `powershell`，回车，打开蓝色窗口。
+
+**2)** 逐行粘贴执行（**所有命令都必须在 `F:\Hexo-blog\blog-demo` 目录里跑**）：
+
+```
+cd F:\Hexo-blog\blog-demo
+npx hexo new "我的新文章标题"
+```
+
+这会生成 `source\_posts\我的新文章标题.md`。用 VS Code 或记事本打开它写内容。
+
+**3)** 本地预览（强烈建议，能省掉大量来回）：
+
+```
+npx hexo server
+```
+
+浏览器打开 <http://localhost:4321/>。改完 Markdown **存盘后刷新浏览器**即可看到效果。看完按 `Ctrl + C` 停止。
+
+**4)** 发布：
+
+```
+npx hexo clean ; npx hexo generate ; npx hexo deploy
+```
+
+**5)** 等 1~2 分钟，浏览器打开 <https://cxh.net.cn/>，按 **`Ctrl + F5`** 强制刷新。
+
+> **懒人版**：不想敲命令就双击 `F:\Hexo-blog\blog-demo\publish.cmd`（发布）或 `preview.cmd`（预览），效果完全一样。
+
+**三条铁律**：
+
+1. 所有 `npx hexo ...` 命令都必须在 `F:\Hexo-blog\blog-demo` 里执行，否则会报 `not a git repository` 之类；
+2. 发之前**必须有 `hexo generate`**——只跑 `deploy` 不会重新生成页面，你改的内容发不上去；
+3. 有公式的文章，front-matter 里必须写 `mathjax: true`，否则公式会原样显示成 `\(...\)`。
 
 ---
 
@@ -305,3 +345,114 @@ deploy:
 | 发布上线 | `npx hexo deploy` |
 | 一键清+生成+发布 | `npx hexo clean ; npx hexo generate ; npx hexo deploy` |
 | 验证 GitHub 登录 | `ssh -T git@github.com` |
+
+---
+
+## 八、换一台电脑：从零搭起来
+
+**一句话**：换电脑只需要四件事——装三样软件、配一把新钥匙、把源码 clone 下来装依赖、之后跟在旧电脑上完全一样。
+
+### 8.1 源码在哪里
+
+源码已经在 git 里，并推到了：
+
+```
+仓库：git@github.com:FINEAR/FINEAR.github.io.git
+分支：source        ← 你的文章和配置都在这里
+```
+
+同一个仓库的 `main` 分支是 `hexo deploy` 自动生成的网页产物，**不要手动去改它**。你写的文章只进 `source` 分支。
+
+### 8.2 装三样软件
+
+| 软件 | 干什么用的 | 下载地址 |
+| --- | --- | --- |
+| Node.js（18 LTS 或 20 LTS） | 跑 Hexo | <https://nodejs.org/> |
+| Git for Windows | 拉源码、推文章 | <https://git-scm.com/download/win> |
+| **Pandoc** | 把 Markdown 转成 HTML；**缺了它构建直接失败**，最容易漏 | <https://pandoc.org/installing.html> |
+
+装完新开一个 PowerShell 窗口验证：
+
+```
+node -v
+git --version
+pandoc -v
+```
+
+三个都能打印版本号就行。
+
+### 8.3 给这台电脑配一把新钥匙
+
+**每台电脑要有自己的 SSH key，不要把旧电脑的私钥拷贝过来。**
+
+```
+ssh-keygen -t ed25519 -C "2574542588@qq.com"
+```
+
+连按回车（密码可以留空）。然后显示公钥内容：
+
+```
+Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub
+```
+
+把输出的**一整行**（以 `ssh-ed25519` 开头、以邮箱结尾）复制下来，粘到 <https://github.com/settings/keys> → **New SSH key** → Title 随便填 → 保存。
+
+验证：
+
+```
+ssh -T git@github.com
+```
+
+看到 `Hi FINEAR! You've successfully authenticated` 就通了。
+
+> **注意**：这条命令成功时**退出码也是 1**（因为 GitHub 不提供 shell），别被退出码吓到。
+
+### 8.4 把源码拉下来并装依赖
+
+```
+cd D:\                                  # 或你想放的位置
+git clone git@github.com:FINEAR/FINEAR.github.io.git hexo-blog
+cd hexo-blog\blog-demo
+npm install
+```
+
+`npm install` 会装 200 多个包，第一次要几分钟，以后不用再装。装完目录里会出现 `node_modules`。
+
+### 8.5 然后就和旧电脑完全一样了
+
+写文章、预览、发布，跟第零节那三条命令一模一样。目录结构也一样（只是根目录从 `F:\Hexo-blog` 变成了 `D:\hexo-blog`）。
+
+### 8.6 收工前多做一步（可选但推荐）
+
+在别的电脑上写完，记得推回远程，否则另一台电脑看不到：
+
+```
+cd D:\hexo-blog
+git add -A
+git commit -m "写了 xxx 这篇"
+git push
+```
+
+---
+
+## 九、报错急救表
+
+| 报错 / 现象 | 原因 | 怎么办 |
+| --- | --- | --- |
+| `Permission denied (publickey)` | 这台电脑的钥匙 GitHub 不认 | 回到 8.3 重新配 key |
+| `Could not read from remote repository` | 同上，或网络不通 | 先 `ssh -T git@github.com` 确认；通了再 deploy |
+| `not a git repository`，或 hexo 命令没反应 | 你不在 `blog-demo` 目录里 | `cd F:\Hexo-blog\blog-demo` |
+| `'npx' 不是内部或外部命令` | 没装 Node.js | 装 Node 后重开窗口 |
+| `pandoc exited with code null` | 没装 Pandoc | 装 Pandoc，重开窗口 |
+| `unsafe repository ... is owned by someone else` | 移动硬盘的属主信息不匹配 | `git config --global --add safe.directory F:/Hexo-blog` |
+| `EISDIR`，或写文件失败 | 这块硬盘是 exFAT，不支持硬链接 | 用 VS Code / 记事本另存，或用 `Copy-Item` |
+| 网站没更新 | ① 忘了 `hexo generate` ② Vercel 还在部署 ③ 浏览器缓存 | 依次排查，最后按 `Ctrl + F5` |
+| 公式显示成 `\(...\)` 原文 | front-matter 少了 `mathjax: true` | 补上，重新发布 |
+| 公式一直转圈不出来 | MathJax 的 CDN 没加载上 | 刷新；仍不行见第六节第 12 条 |
+| 评论框是空的 | Giscus 还差 `category_id` | 见第六节第 9 条 |
+
+### 怎么确认真的发出去了
+
+1. 执行 `hexo deploy` 时，最后应该打印类似 `abc1234..def5678  HEAD -> main` 的一行——**看到 `-> main` 就是推成功了**；
+2. 等 1~2 分钟，浏览器打开 <https://cxh.net.cn/> 并按 `Ctrl + F5`；
+3. 想看部署进度：登录 <https://vercel.com/dashboard>，Deployments 列表里最新一条变成 **Ready** 就成了。
